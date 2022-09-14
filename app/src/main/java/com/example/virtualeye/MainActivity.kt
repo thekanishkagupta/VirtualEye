@@ -1,7 +1,6 @@
 package com.example.virtualeye
 
 import android.Manifest
-import android.R
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -12,6 +11,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -37,38 +37,41 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-       setSupportActionBar(binding.appBarMain.toolbar)
+       //setSupportActionBar(binding.appBarMain.toolbar)
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-           setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-            ), drawerLayout
-        )
-       setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+//        binding.appBarMain.fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
+
+
+        val navController = Navigation.findNavController(this, R.id.navHost)
+
+        binding.navView.setupWithNavController(navController)
+
+//        // Passing each menu ID as a set of Ids because each
+//        // menu should be considered as top level destinations.
+//        appBarConfiguration = AppBarConfiguration(
+//           setOf(
+//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+//            ), binding.drawerLayout
+//        )
+//       setupActionBarWithNavController(navController, appBarConfiguration)
+
 
         // Permission
         openCamera()
 
-        startCamera()
+//        startCamera()
 
 
         // Live detection and tracking
-        val options = ObjectDetectorOptions.Builder()
-            .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
-            .enableClassification()  // Optional
-            .build()
-
-        val objectDetector = ObjectDetection.getClient(options)
+//        val options = ObjectDetectorOptions.Builder()
+//            .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
+//            .enableClassification()  // Optional
+//            .build()
+//
+//        val objectDetector = ObjectDetection.getClient(options)
 
 
     }
@@ -88,37 +91,37 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
 
 
-        private fun startCamera() {
-            val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-
-            cameraProviderFuture.addListener({
-                // Used to bind the lifecycle of cameras to the lifecycle owner
-                val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-                // Preview
-                val preview = Preview.Builder()
-                    .build()
-                    .also {
-                        it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
-                    }
-
-                // Select back camera as a default
-                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-                try {
-                    // Unbind use cases before rebinding
-                    cameraProvider.unbindAll()
-
-                    // Bind use cases to camera
-                    cameraProvider.bindToLifecycle(
-                        this, cameraSelector, preview)
-
-                } catch(exc: Exception) {
-                    Log.e("KanishkaApp", "Use case binding failed", exc)
-                }
-
-            }, ContextCompat.getMainExecutor(this))
-        }
+//        private fun startCamera() {
+//            val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+//
+//            cameraProviderFuture.addListener({
+//                // Used to bind the lifecycle of cameras to the lifecycle owner
+//                val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+//
+//                // Preview
+//                val preview = Preview.Builder()
+//                    .build()
+//                    .also {
+//                        it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+//                    }
+//
+//                // Select back camera as a default
+//                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+//
+//                try {
+//                    // Unbind use cases before rebinding
+//                    cameraProvider.unbindAll()
+//
+//                    // Bind use cases to camera
+//                    cameraProvider.bindToLifecycle(
+//                        this, cameraSelector, preview)
+//
+//                } catch(exc: Exception) {
+//                    Log.e("KanishkaApp", "Use case binding failed", exc)
+//                }
+//
+//            }, ContextCompat.getMainExecutor(this))
+//        }
 
 
     override fun onRequestPermissionsResult(
